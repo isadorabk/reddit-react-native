@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { FlatList, Text, View, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { FlatList, View, ActivityIndicator } from 'react-native';
+import PostItem from './PostItem';
 
 class PostList extends Component {
   constructor(props) {
@@ -39,28 +40,7 @@ class PostList extends Component {
     });
   }
 
-  //TODO: PostItem component
-  renderPosts = ({ item }) => {
-    return (
-      <TouchableOpacity onPress={() => console.log('Pressed!')}>
-        <View>
-          <Image
-            style={{ width: 140, height: 112 }} 
-            source={{ uri: item.data.url }} 
-          />
-        </View>
-        <View>
-          <Text>{item.data.created}</Text>
-          <Text>{item.data.title}</Text>
-        </View>
-        <View>
-          <Text>{item.data.author}</Text>
-          <Text>{item.data.score}</Text>
-          <Text>{item.data.num_comments}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  }
+  renderPosts = ({ item }) => <PostItem item={item} />;
 
   renderSeparator = () => {
     return (
@@ -81,7 +61,8 @@ class PostList extends Component {
 
   render() {
     return (
-      <View>
+      //TODO: refactor style
+      <View style={{ flex: 1 }}>
         {this.renderActivityIndicator()}
         <FlatList 
           data={this.state.posts}

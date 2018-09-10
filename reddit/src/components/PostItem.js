@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { withNavigation } from 'react-navigation';
+import moment from 'moment';
 
 class PostItem extends Component {
 
   render() {
-    const { author, created, score, title, thumbnail } = this.props.item.data;
-    const comments = this.props.item.data.num_comments;
-    const url = `https://reddit.com${this.props.item.data.permalink}`;
+    const { 
+      author,
+      created_utc: date,
+      score,
+      title,
+      thumbnail,
+      num_comments: comments,
+      permalink
+    } = this.props.item.data;
+    const url = `https://reddit.com${permalink}`;
     const { navigate } = this.props.navigation;
+    const relativeDate = moment.unix(date).fromNow();
     return (
       <View style={{ flex: 1 }}>
         <TouchableOpacity onPress={() => navigate('PostWebView', { url })}>
@@ -19,7 +28,7 @@ class PostItem extends Component {
             />
           </View>
           <View>
-            <Text>{created}</Text>
+            <Text>{relativeDate}</Text>
             <Text>{title}</Text>
           </View>
           <View>

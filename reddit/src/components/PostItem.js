@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
+import { withNavigation } from 'react-navigation';
 
 class PostItem extends Component {
 
   render() {
-    const { author, created, score, title, thumbnail, url, permalink } = this.props.item.data;
+    const { author, created, score, title, thumbnail } = this.props.item.data;
     const comments = this.props.item.data.num_comments;
+    const url = `https://reddit.com${this.props.item.data.permalink}`;
+    const { navigate } = this.props.navigation;
     return (
       <View style={{ flex: 1 }}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigate('PostWebView', { url })}>
           <View>
             <Image
               style={{ width: 140, height: 112 }} 
@@ -30,4 +33,4 @@ class PostItem extends Component {
   }
 }
 
-export default PostItem;
+export default withNavigation(PostItem);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, View, ActivityIndicator } from 'react-native';
+import { FlatList, View, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
 import PostItem from './PostItem';
 
 class PostList extends Component {
@@ -32,6 +32,29 @@ class PostList extends Component {
     }
   }
 
+  styles = StyleSheet.create({
+    viewStyle: {
+      flex: 1,
+      backgroundColor: '#F8F8F8',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.2,
+      elevation: 2,
+    },
+    activityIndicatorStyle: {
+      marginTop: '50%'
+    },
+    separatorStyle: {
+      height: 1,
+      width: Dimensions.get('window').width - 10,
+      marginLeft: 5,
+      backgroundColor: '#ddd'
+    }
+  });
+
   handleRefresh = () => {
     this.setState({
       refreshing: true
@@ -42,18 +65,14 @@ class PostList extends Component {
 
   renderPosts = ({ item }) => <PostItem item={item} />;
 
-  renderSeparator = () => {
-    return (
-      //TODO: refactor style
-      <View style={{ height: 1, width: '100%', backgroundColor: '#CED0CE' }} />
-    );
-  }
+  renderSeparator = () => (
+    <View style={this.styles.separatorStyle} />
+  );
 
   renderActivityIndicator = () => {
     if (!this.state.loading || this.state.refreshing) return null;
     return (
-      //TODO: refactor style
-      <View style={{ marginTop: '50%' }}>
+      <View style={this.styles.activityIndicatorStyle}>
         <ActivityIndicator size="large" animating />
       </View>
     );
@@ -61,8 +80,7 @@ class PostList extends Component {
 
   render() {
     return (
-      //TODO: refactor style
-      <View style={{ flex: 1 }}>
+      <View style={this.styles.viewStyle}>
         {this.renderActivityIndicator()}
         <FlatList 
           data={this.state.posts}
@@ -75,7 +93,6 @@ class PostList extends Component {
       </View>
     );
   }
-
 }
 
 export default PostList;

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { FlatList, View, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
+import { connect } from 'react-redux';
 import PostItem from './PostItem';
+import { getPosts } from '../actions/posts.actions';
 
 class PostList extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      posts: [],
       loading: false,
       refreshing: false
     };
@@ -16,16 +17,22 @@ class PostList extends Component {
     this.fetchData();
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.category !== prevProps.category) {
+      this.fetchData();
+    }
+  }
+
   fetchData = async () => {
-    const url = 'https://api.reddit.com/r/pics/new.json';
+    const url = `https://api.reddit.com/r/pics/${this.props.category}.json`;
     this.setState({ loading: true });
     try {
       const response = await fetch(url);
       const responseJson = await response.json();
+      this.props.getPosts(responseJson.data.children);
       this.setState({
         loading: false,
-        refreshing: false,
-        posts: responseJson.data.children
+        refreshing: false
       });
     } catch (error) {
       console.error(error);
@@ -63,12 +70,6 @@ class PostList extends Component {
     });
   }
 
-  renderPosts = ({ item }) => <PostItem item={item} />;
-
-  renderSeparator = () => (
-    <View style={this.styles.separatorStyle} />
-  );
-
   renderActivityIndicator = () => {
     if (!this.state.loading || this.state.refreshing) return null;
     return (
@@ -78,12 +79,18 @@ class PostList extends Component {
     );
   }
 
+  renderPosts = ({ item }) => <PostItem item={item} />;
+
+  renderSeparator = () => (
+    <View style={this.styles.separatorStyle} />
+  );
+
   render() {
     return (
       <View style={this.styles.viewStyle}>
         {this.renderActivityIndicator()}
         <FlatList 
-          data={this.state.posts}
+          data={this.props.posts}
           keyExtractor={(item) => item.data.id}
           renderItem={this.renderPosts}
           ItemSeparatorComponent={this.renderSeparator}
@@ -95,4 +102,13 @@ class PostList extends Component {
   }
 }
 
-export default PostList;
+const mapStateToProps = state => ({
+  posts: state.posts,
+  category: state.category
+});
+
+const mapDispatchToProps = dispatch => ({
+  getPosts: posts => dispatch(getPosts(posts))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostList);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { WebView } from 'react-native';
 
-class PostDetail extends Component {
+class PostWebView extends Component {
   render() {
     const uri = this.props.navigation.getParam('url');
     return (
@@ -10,4 +10,4 @@ class PostDetail extends Component {
   }
 }
 
-export default PostDetail;
+export default PostWebView;

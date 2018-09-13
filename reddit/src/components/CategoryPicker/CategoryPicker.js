@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Picker } from 'react-native';
+import { View, Text, Picker } from 'react-native';
 import { connect } from 'react-redux';
-import { getPostsByCategory } from '../actions/posts.actions';
+import { getPostsByCategory } from '../../actions/posts.actions';
+import styles from './styles';
 
-class PickerCategory extends Component {
+const { container, text, pickerContainer, pickerItem } = styles;
+
+class CategoryPicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,11 +35,11 @@ class PickerCategory extends Component {
 
   render() {
     return (
-    <View style={styles.viewStyle}>
-      <Text style={{ width: '40%', textAlign: 'right' }}>Choose a category: </Text>
+    <View style={container}>
+      <Text style={text}>Choose a category: </Text>
       <Picker
-        style={{ width: '40%' }}
-        itemStyle={{ height: 40, fontSize: 15, fontWeight: '900' }}
+        style={pickerContainer}
+        itemStyle={pickerItem}
         selectedValue={this.state.selectedCategory}
         onValueChange={(itemValue, itemIndex) => {
           this.setState({
@@ -53,25 +56,8 @@ class PickerCategory extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  viewStyle: {
-    backgroundColor: '#F8F8F8',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    elevation: 2
-  },
-  textStyle: {
-    fontSize: 20
-  }
-});
-
 const mapDispatchToProps = dispatch => ({
   getPostsByCategory: category => dispatch(getPostsByCategory(category))
 });
 
-export default connect(null, mapDispatchToProps)(PickerCategory);
+export default connect(null, mapDispatchToProps)(CategoryPicker);

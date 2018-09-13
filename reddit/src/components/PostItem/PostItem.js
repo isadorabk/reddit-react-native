@@ -1,56 +1,30 @@
 import React, { Component } from 'react';
-import { Text, View, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import moment from 'moment';
-import Post from './Post';
+import Post from '../Post/Post';
+import styles from './styles';
+
+const { 
+  touchableContainer,
+  imageContainer,
+  image,
+  textContainer,
+  dateStyle,
+  titleStyle,
+  subtitlesContainer,
+  subtitles
+} = styles;
 
 class PostItem extends Component {
   thumbnailHeight = this.props.item.data.thumbnail_height;
   thumbnailWidth = this.props.item.data.thumbnail_width;
-  
-  styles = StyleSheet.create({
-    containerStyle: {
-      flexDirection: 'row'
-    },
-    imageContainerStyle: {
-      width: this.thumbnailWidth * 0.75,
-      height: this.thumbnailHeight * 0.75,
-      alignSelf: 'center'
-    },
-    imageStyle: {
-      flex: 1
-    },
-    textContainerStyle: {
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      padding: 5,
-      width: Dimensions.get('window').width - 120,
-    },
-    dateStyle: {
-      alignSelf: 'flex-end',
-      fontSize: 10,
-      marginBottom: 5
-    },
-    titleStyle: {
-      fontWeight: 'bold',
-      marginBottom: 5,
-      textAlign: 'center'
-    },
-    subtitlesContainerStyle: {
-      flexDirection: 'row',
-      justifyContent: 'space-between'
-    },
-    subtitlesStyle: {
-      fontSize: 10
-    }
-
-  });
 
   renderComments = () => {
     const { num_comments: comments } = this.props.item.data;
     const numComments = comments > 1000 ? `${(comments / 1000).toFixed(1)}k` : comments;
     return (
-    <Text style={this.styles.subtitlesStyle}>
+    <Text style={subtitles}>
       {numComments} {comments > 1 ? 'comments' : 'comment'}
     </Text>
     );
@@ -60,7 +34,7 @@ class PostItem extends Component {
     const { score } = this.props.item.data;
     const numScore = score > 1000 ? `${(score / 1000).toFixed(1)}k` : score;
     return (
-      <Text style={this.styles.subtitlesStyle}>
+      <Text style={subtitles}>
         Score: {numScore}
       </Text>
     );
@@ -80,21 +54,27 @@ class PostItem extends Component {
     return (
       <Post>
         <TouchableOpacity 
-          style={this.styles.containerStyle}
+          style={touchableContainer}
           onPress={() => navigate('PostWebView', { url })}
         >
-          <View style={this.styles.imageContainerStyle}>
+          < View 
+            style={{ 
+              ...imageContainer,
+              width: this.thumbnailWidth * 0.75,
+              height: this.thumbnailHeight * 0.75,
+            }}
+          >
             <Image
-              style={this.styles.imageStyle}
+              style={image}
               resizeMode='contain'
               source={{ uri: thumbnail }} 
             />
           </View>
-          <View style={this.styles.textContainerStyle}>
-            <Text style={this.styles.dateStyle}>{relativeDate}</Text>
-            <Text style={this.styles.titleStyle}>{title}</Text>
-            <View style={this.styles.subtitlesContainerStyle}>
-              <Text style={this.styles.subtitlesStyle}>
+          <View style={textContainer}>
+            <Text style={dateStyle}>{relativeDate}</Text>
+            <Text style={titleStyle}>{title}</Text>
+            <View style={subtitlesContainer}>
+              <Text style={subtitles}>
                 By {author}
               </Text>
               {this.renderScore()}

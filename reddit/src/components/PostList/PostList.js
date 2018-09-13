@@ -1,37 +1,17 @@
 import React, { Component } from 'react';
-import { FlatList, View, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
+import { FlatList, View, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import PostItem from './PostItem';
-import { getPostsByCategory, refreshPosts } from '../actions/posts.actions';
+import PostItem from '../PostItem/PostItem';
+import { getPostsByCategory, refreshPosts } from '../../actions/posts.actions';
+import styles from './styles';
+
+const { container, activityIndicatorStyle, separator } = styles;
 
 class PostList extends Component {
 
   componentDidMount() {
     this.props.getPostsByCategory(this.props.category);
   }
-
-  styles = StyleSheet.create({
-    viewStyle: {
-      flex: 1,
-      backgroundColor: '#F8F8F8',
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.2,
-      elevation: 2,
-    },
-    activityIndicatorStyle: {
-      marginTop: '50%'
-    },
-    separatorStyle: {
-      height: 1,
-      width: Dimensions.get('window').width - 10,
-      marginLeft: 5,
-      backgroundColor: '#ddd'
-    }
-  });
 
   handleRefresh = () => {
     this.props.refreshPosts({ refreshing: true });
@@ -41,7 +21,7 @@ class PostList extends Component {
   renderActivityIndicator = () => {
     if (!this.props.loading || this.props.refreshing) return null;
     return (
-      <View style={this.styles.activityIndicatorStyle}>
+      <View style={activityIndicatorStyle}>
         <ActivityIndicator size="large" animating />
       </View>
     );
@@ -50,12 +30,12 @@ class PostList extends Component {
   renderPosts = ({ item }) => <PostItem item={item} />;
 
   renderSeparator = () => (
-    <View style={this.styles.separatorStyle} />
+    <View style={separator} />
   );
 
   render() {
     return (
-      <View style={this.styles.viewStyle}>
+      <View style={container}>
         {this.renderActivityIndicator()}
         <FlatList 
           data={this.props.posts}

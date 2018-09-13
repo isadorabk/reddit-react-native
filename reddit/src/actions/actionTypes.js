@@ -1,2 +1,5 @@
-export const GET_CATEGORY = 'GET_CATEGORY';
 export const GET_POSTS = 'GET_POSTS';
+export const GET_POSTS_REQUEST = 'GET_POSTS_REQUEST';
+export const GET_POSTS_SUCCESS = 'GET_POSTS_SUCCESS';
+export const GET_POSTS_FAILURE = 'GET_POSTS_FAILURE';
+export const REFRESH_POSTS = 'REFRESH_POSTS';

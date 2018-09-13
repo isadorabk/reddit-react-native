@@ -1,21 +1,33 @@
-import { GET_CATEGORY, GET_POSTS } from '../actions/actionTypes';
+import * as Actions from '../actions/actionTypes';
 
 const initialState = { 
   posts: [],
-  category: 'new'
+  loading: false,
+  refreshing: false,
+  category: 'new',
+  error: false
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case GET_CATEGORY:
+    case Actions.GET_POSTS_REQUEST:
       return {
         ...state,
-        category: action.category
+        loading: true
       };
-    case GET_POSTS:
+    case Actions.GET_POSTS_SUCCESS:
       return {
         ...state,
-        posts: action.posts
+        category: action.category,
+        posts: action.data.data.children,
+        loading: false,
+        refreshing: false
+      };
+    case Actions.GET_POSTS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
       };
     default:
       return state;

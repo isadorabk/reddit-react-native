@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Picker } from 'react-native';
 import { connect } from 'react-redux';
-import { getCategory } from '../actions/posts.actions';
+import { getPostsByCategory } from '../actions/posts.actions';
 
 class PickerCategory extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      selectedCategory: 'new',
       categoriesList: [
         {
           label: 'New',
@@ -36,8 +37,14 @@ class PickerCategory extends Component {
       <Picker
         style={{ width: '40%' }}
         itemStyle={{ height: 40, fontSize: 15, fontWeight: '900' }}
-        selectedValue={this.props.category}
-        onValueChange={(itemValue, itemIndex) => this.props.getCategory(itemValue)}
+        selectedValue={this.state.selectedCategory}
+        onValueChange={(itemValue, itemIndex) => {
+          this.setState({
+            selectedCategory: itemValue
+          });
+          this.props.getPostsByCategory(itemValue);
+          }
+        }
       >
         {this.renderPickerItems()}
       </Picker>
@@ -63,12 +70,8 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = state => ({
-  category: state.category
-});
-
 const mapDispatchToProps = dispatch => ({
-  getCategory: category => dispatch(getCategory(category))
+  getPostsByCategory: category => dispatch(getPostsByCategory(category))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PickerCategory);
+export default connect(null, mapDispatchToProps)(PickerCategory);

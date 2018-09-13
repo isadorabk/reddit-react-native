@@ -9,6 +9,7 @@ const Post = ({ children }) => (
 
  const styles = StyleSheet.create({
   containerStyle: {
+    backgroundColor: '#F8F8F8',
     borderWidth: 1,
     borderRadius: 2,
     borderColor: '#ddd',

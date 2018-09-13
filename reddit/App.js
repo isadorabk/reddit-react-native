@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import reducers from './src/reducers/posts.reducer';
+import { createStore, applyMiddleware } from 'redux';
+import logger from 'redux-logger';
+import reducer from './src/reducers/index';
 import Home from './src/screens/Home';
 import PostWebView from './src/screens/PostWebView';
+import apiMiddleware from './src/middlewares/api.middleware';
 
-const store = createStore(reducers);
+const store = createStore(reducer, applyMiddleware(logger, apiMiddleware));
 
 const AppNavigation = createStackNavigator(
   {

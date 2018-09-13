@@ -2,41 +2,12 @@ import React, { Component } from 'react';
 import { FlatList, View, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import PostItem from './PostItem';
-import { getPosts } from '../actions/posts.actions';
+import { getPostsByCategory, refreshPosts } from '../actions/posts.actions';
 
 class PostList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { 
-      loading: false,
-      refreshing: false
-    };
-  }
 
   componentDidMount() {
-    this.fetchData();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.category !== prevProps.category) {
-      this.fetchData();
-    }
-  }
-
-  fetchData = async () => {
-    const url = `https://api.reddit.com/r/pics/${this.props.category}.json`;
-    this.setState({ loading: true });
-    try {
-      const response = await fetch(url);
-      const responseJson = await response.json();
-      this.props.getPosts(responseJson.data.children);
-      this.setState({
-        loading: false,
-        refreshing: false
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    this.props.getPostsByCategory(this.props.category);
   }
 
   styles = StyleSheet.create({
@@ -63,15 +34,12 @@ class PostList extends Component {
   });
 
   handleRefresh = () => {
-    this.setState({
-      refreshing: true
-    }, () => {
-      this.fetchData();
-    });
+    this.props.refreshPosts({ refreshing: true });
+    this.props.getPostsByCategory(this.props.category);
   }
 
   renderActivityIndicator = () => {
-    if (!this.state.loading || this.state.refreshing) return null;
+    if (!this.props.loading || this.props.refreshing) return null;
     return (
       <View style={this.styles.activityIndicatorStyle}>
         <ActivityIndicator size="large" animating />
@@ -94,7 +62,7 @@ class PostList extends Component {
           keyExtractor={(item) => item.data.id}
           renderItem={this.renderPosts}
           ItemSeparatorComponent={this.renderSeparator}
-          refreshing={this.state.refreshing}
+          refreshing={this.props.refreshing}
           onRefresh={this.handleRefresh}
         />
       </View>
@@ -102,13 +70,18 @@ class PostList extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  posts: state.posts,
-  category: state.category
-});
+const mapStateToProps = state => {
+    return ({
+      loading: state.posts.loading,
+      refreshing: state.posts.refreshing,
+      category: state.posts.category,
+      posts: state.posts.posts
+    });
+};
 
 const mapDispatchToProps = dispatch => ({
-  getPosts: posts => dispatch(getPosts(posts))
+  getPostsByCategory: category => dispatch(getPostsByCategory(category)),
+  refreshPosts: refreshing => dispatch(refreshPosts(refreshing))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostList);

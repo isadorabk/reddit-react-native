@@ -1,11 +1,14 @@
-import { GET_CATEGORY, GET_POSTS } from './actionTypes';
+import { GET_POSTS, REFRESH_POSTS } from './actionTypes';
 
-export const getCategory = category => ({
-  type: GET_CATEGORY,
-  category
+export const getPostsByCategory = category => ({
+  type: GET_POSTS,
+  category,
+  api: {
+    endpoint: `${category}.json`
+  }
 });
 
-export const getPosts = posts => ({
-  type: GET_POSTS,
-  posts
+export const refreshPosts = refreshing => ({
+  type: REFRESH_POSTS,
+  refreshing
 });

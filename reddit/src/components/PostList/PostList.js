@@ -50,14 +50,12 @@ class PostList extends Component {
   }
 }
 
-const mapStateToProps = state => {
-    return ({
-      loading: state.posts.loading,
-      refreshing: state.posts.refreshing,
-      category: state.posts.category,
-      posts: state.posts.posts
-    });
-};
+const mapStateToProps = state => ({
+  loading: state.posts.loading,
+  refreshing: state.posts.refreshing,
+  category: state.posts.category,
+  posts: state.posts.posts
+});
 
 const mapDispatchToProps = dispatch => ({
   getPostsByCategory: category => dispatch(getPostsByCategory(category)),

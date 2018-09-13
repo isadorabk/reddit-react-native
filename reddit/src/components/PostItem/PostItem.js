@@ -17,8 +17,6 @@ const {
 } = styles;
 
 class PostItem extends Component {
-  thumbnailHeight = this.props.item.data.thumbnail_height;
-  thumbnailWidth = this.props.item.data.thumbnail_width;
 
   renderComments = () => {
     const { num_comments: comments } = this.props.item.data;
@@ -46,6 +44,8 @@ class PostItem extends Component {
       created_utc: date,
       title,
       thumbnail,
+      thumbnail_height: thumbnailHeight,
+      thumbnail_width: thumbnailWidth,
       permalink
     } = this.props.item.data;
     const url = `https://reddit.com${permalink}`;
@@ -57,11 +57,11 @@ class PostItem extends Component {
           style={touchableContainer}
           onPress={() => navigate('PostWebView', { url })}
         >
-          < View 
+          <View 
             style={{ 
               ...imageContainer,
-              width: this.thumbnailWidth * 0.75,
-              height: this.thumbnailHeight * 0.75,
+              width: thumbnailWidth * 0.75,
+              height: thumbnailHeight * 0.75,
             }}
           >
             <Image

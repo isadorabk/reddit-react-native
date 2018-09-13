@@ -10,23 +10,16 @@ class CategoryPicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedCategory: 'new',
-      categoriesList: [
-        {
-          label: 'New',
-          value: 'new'
-        }, {
-          label: 'Top',
-          value: 'top'
-        }, {
-          label: 'Hot',
-          value: 'hot'
-        }, {
-          label: 'Controversial',
-          value: 'controversial'
-        }
-      ]
+      selectedCategory: props.selectedCategory,
+      categoriesList: props.categoriesList
     };
+  }
+
+  handleChange = (itemValue, itemIndex) => {
+    this.setState({
+      selectedCategory: itemValue
+    });
+    this.props.getPostsByCategory(itemValue);
   }
 
   renderPickerItems = () => this.state.categoriesList.map(
@@ -41,13 +34,7 @@ class CategoryPicker extends Component {
         style={pickerContainer}
         itemStyle={pickerItem}
         selectedValue={this.state.selectedCategory}
-        onValueChange={(itemValue, itemIndex) => {
-          this.setState({
-            selectedCategory: itemValue
-          });
-          this.props.getPostsByCategory(itemValue);
-          }
-        }
+        onValueChange={this.handleChange}
       >
         {this.renderPickerItems()}
       </Picker>
